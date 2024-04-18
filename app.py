@@ -44,12 +44,16 @@ def wall_page():
                 st.image(image, caption="wallpaper", use_column_width=True)
         zipfolder(folder_path, "wallpaper")
         with open("wallpaper.zip", "rb") as f:
-            st.sidebar.download_button(
+            download=st.sidebar.download_button(
                 label="Download Wallpapers",
                 data=f,
                 file_name="Wallpapaer.zip",
                 mime="application/zip",
             )
+            if download:
+                shutil.rmtree(folder_path)
+                if os.remove('wallpaper.zip'):
+                    st.sidebar.success("File deleted")
 
 
 menu = ["wallpaper"]

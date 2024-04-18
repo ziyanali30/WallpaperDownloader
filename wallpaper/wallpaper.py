@@ -34,7 +34,6 @@ class wallpaper:
     def process_data(self, link):
         data = json.loads(link.text)["data"]
         final = pd.DataFrame(data)
-        print(final)
         return final
 
     def get_wallpaper(self):
@@ -55,12 +54,16 @@ class wallpaper:
             Soup = BeautifulSoup(rr, "html5lib")
             img = Soup.find("img", {"id": "wallpaper"})
             fimg = requests.get(img["src"])
-            type = data["file_type"][dat].split("/")[1]
-            final = os.path.join(path, data["id"][dat] + "." + type)
-            with open(final, "wb") as f:
-                f.write(fimg.content)
-            progress_percentage = i / len(data.index)
-            yield f"Downloading wallpaper {i}/{len(data.index)}...", progress_percentage
+            if fimg is not None:
+                type = data["file_type"][dat].split("/")[1]
+                final = os.path.join(path, data["id"][dat] + "." + type)
+                with open(final, "wb") as f:
+                    f.write(fimg.content)
+                progress_percentage = i / len(data.index)
+                yield f"Downloading wallpaper {i}/{len(data.index)}...", progress_percentage
+            else:
+                yield f"Downloading wallpaper {i}/{len(data.index)}...", progress_percentage
+                continue
         yield f"Downloading wallpaper {24}/{len(data.index)}...", 100
 
 

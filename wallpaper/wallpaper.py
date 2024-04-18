@@ -53,8 +53,8 @@ class wallpaper:
             rr = requests.get(link).text
             Soup = BeautifulSoup(rr, "html5lib")
             img = Soup.find("img", {"id": "wallpaper"})
-            fimg = requests.get(img["src"])
-            if fimg is not None:
+            if img is not None:
+                fimg = requests.get(img["src"])
                 type = data["file_type"][dat].split("/")[1]
                 final = os.path.join(path, data["id"][dat] + "." + type)
                 with open(final, "wb") as f:
